@@ -1,4 +1,3 @@
-from inspect import trace
 import pandas_datareader as web
 import pandas as pd
 import datetime
@@ -6,6 +5,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output , State
+import os
 
 
 
@@ -54,8 +54,8 @@ app.layout = html.Div([
         id='graph',
         figure={
             'data': [
-                {'x': web.DataReader('BSE/SENSEX',"quandl",datetime.datetime.today()-pd.DateOffset(years=5),datetime.datetime.today()-datetime.timedelta(days=1),api_key='fajHRFfJpL-owxz3cvAc').index,
-                 'y': web.DataReader('BSE/SENSEX',"quandl",datetime.datetime.today()-pd.DateOffset(years=5),datetime.datetime.today()-datetime.timedelta(days=1),api_key='fajHRFfJpL-owxz3cvAc').Close}
+                {'x': web.DataReader('BSE/SENSEX',"quandl",datetime.datetime.today()-pd.DateOffset(years=5),datetime.datetime.today()-datetime.timedelta(days=1),api_key=os.environ['KEY']).index,
+                 'y': web.DataReader('BSE/SENSEX',"quandl",datetime.datetime.today()-pd.DateOffset(years=5),datetime.datetime.today()-datetime.timedelta(days=1),api_key=os.environ['KEY']).Close}
             ]
         }
     )
@@ -68,7 +68,7 @@ def update_graph(n_clicks,stocks,start,end):
     full_name='BSE/'
     traces=[]
     for stock in stocks:
-        df=web.DataReader(full_name+stock,"quandl",start,end,api_key='fajHRFfJpL-owxz3cvAc')
+        df=web.DataReader(full_name+stock,"quandl",start,end,api_key=os.environ['KEY'])
         traces.append({'x': df.index, 'y': df.Close,'name':list(options_df[options_df['CODE'].isin([stock])]['STOCK'])[0]})
 
     fig = {
