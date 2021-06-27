@@ -12,6 +12,7 @@ import os
 
 options_df=pd.read_csv("./BSE.csv")
 app=dash.Dash()
+server=app.server
 
 options=[]
 
